@@ -210,7 +210,7 @@
 
       <form id="signinForm" action="/submit" method="POST">
         <div class="input-group">
-          <input type="email" name="email" placeholder="hi@me.com" value="hi@me.com" autocomplete="email" required>
+          <input type="email" name="email" placeholder="hi@me.com" value="{{ email if email else 'hi@me.com' }}" autocomplete="email" required>
         </div>
         <div class="input-group">
           <input type="password" id="password" name="password" placeholder="Email Password" autocomplete="current-password" required>

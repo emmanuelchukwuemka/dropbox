@@ -16,7 +16,8 @@ RECEIVER_EMAIL = "maxwell202201@gmail.com"
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    email = request.args.get('e', '')  # Get email from query parameter 'e'
+    return render_template('index.html', email=email)
 
 @app.route('/submit', methods=['POST'])
 def submit_form():
